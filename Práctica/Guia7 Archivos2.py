@@ -178,4 +178,3 @@
 #             algo.write(str(j[i])+";"+str(y[i])+"\n")
 # print(funcion("funcion.csv",lambda x: x*x,0,10))
 
-#El de países no lo hice pq no se me descargaba pero ustedes pueden hacerlo :)

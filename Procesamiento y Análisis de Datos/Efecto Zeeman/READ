@@ -1,0 +1,4 @@
+En esta carpeta se encuentran dos archivos utilizados para la determinación del magnetón de Bohr tras la realización de la experiencia de la visualización del Efecto Zeeman.
+
+Ambos códigos utilizan dos formas diferentes de determinar dicha magnitud. Los análisis se hacen tras realizar un pre-procesado de imágenes en el software ImageJ donde se obtuvieron las curvas de 
+intensidad de las imágenes en función del pixel.

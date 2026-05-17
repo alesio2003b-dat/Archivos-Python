@@ -1,0 +1,7 @@
+En esta carpeta se encuentran archivos utilizados para realizar el procesamiento de datos de la experiencia de emulación de fonones.
+
+
+El código "codigos_parametros.py" se encarga de resolver un determinante de 10x10 para obtener los valores de las frecuencias fundamentales de oscilación de una cuerda
+con masas encargada de emular el comportamiento de los fonones de un sólido.
+
+Los dos archivos restantes se encargan de simular las frecuencias predichas de la teoría lo cuál es  útil para realizar la experiencia. Además, se encargan de comparar los valores experimentales con los teóricos.

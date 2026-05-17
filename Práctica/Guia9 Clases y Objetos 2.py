@@ -284,9 +284,7 @@ class Cuenta(object):
 # #         #No pregunté como hacer asi que les toca preguntar a ustedes
 
 
-#Ejercicio 10
-#Este de abajo es el problema del Alumno universitario, para acordarme del codigo pegué abajo el
-#código de la clase Alumno, pero no sirve para na
+
 
 # class Alumno(object):
 #     def __init__(self,Nombre,dni,materias={}):
@@ -368,9 +366,7 @@ a=Alumno("Alumno1",442,{"Fisica":[9,8,9],"Química":[8,7,8],"Futbol":[10,10,10],
 # b.aprobada("Amor",False)
 # print(b)
 
-#Ejercicio 11
-#El problema de la biblioteca no entiendo si quiere que haga un diccionario, una lista o qué. Entonces cambia si es uno o otro
-#Pero no es dificil, ustedes pueden :) y chat gpt también.
+
 
 #Ejercicio 12
 #Billetera virtual

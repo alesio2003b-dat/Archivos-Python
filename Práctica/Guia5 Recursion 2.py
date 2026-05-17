@@ -116,5 +116,4 @@
 
 # print(Par(18)) 
 
-#El ultimo no lo hice (pero si quieren saber como se hace pidanmelo y les consigo la solución)
 

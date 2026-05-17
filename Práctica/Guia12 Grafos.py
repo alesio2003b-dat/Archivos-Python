@@ -1,6 +1,4 @@
-#Chicos, acá abajo está el scrip grafos que les dan los profes, con todas las funciones que pide la guía agregadas
-#También están resueltos los ejercicios más abajo.
-
+###Ejercicios de la guía de Grafos
 #Ejercicio 1
 #Nodos
 def crearnodos(*Nodos):

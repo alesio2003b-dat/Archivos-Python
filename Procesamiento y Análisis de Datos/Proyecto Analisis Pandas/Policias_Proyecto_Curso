@@ -1,0 +1,167 @@
+%%%Visualización y limpieza de datos%%%%
+
+
+import pandas as pd
+ri = pd.read_csv('police.csv')
+print(ri.head())
+print(ri.isnull().sum())
+%Elimino columnas
+print(ri.shape)
+ri.drop(['county_name', 'state'], axis='columns', inplace=True)
+print(ri.shape)
+%Elimino filas
+print(ri.isnull().sum())
+ri.dropna(subset=['driver_gender'], inplace=True)
+print(ri.isnull().sum())
+print(ri.shape)
+
+
+%%% Cambio de tipo de datos
+display(ri.info())
+print(ri.is_arrested.dtype) #Visualizo el tipo de datos de la columna
+
+ri['is_arrested'] = ri.is_arrested.astype(bool)
+print(ri.is_arrested.dtype)
+
+%Tratamiento de las columnas "stop_date" y "stop_time" para unificarlas en una única columna
+# Concateno las columnas
+combined = ri.stop_date.str.cat(ri.stop_time,sep=' ')
+
+# Convierno la nueva columna a formato fecha y hora y la llamo "stop_datetime"
+ri['stop_datetime'] = pd.to_datetime(combined)
+# Re-examino el df para observar que esté bien
+print(ri.info())
+#Defino como indice la nueva columna
+ri.set_index('stop_datetime', inplace=True)
+
+
+
+
+%%%%%%%Exploracion de relación entre género e infracciones
+%Cuento la cantidad de los distintos incidentes ocurridos y calculo su proporcion
+print(ri['violation'].value_counts())
+print(ri['violation'].value_counts(normalize=True))
+
+%%%Genero dos datasets. Uno de hombres y otro de mujeres y calculo las proporciones de infracciones.
+
+female = ri[ri.driver_gender=='F']
+male = ri[ri.driver_gender=='M']
+
+print(female['violation'].value_counts(normalize=True))
+print(male['violation'].value_counts(normalize=True))
+
+
+%%%Calculo proporciones de nuevos df de mujeres y hombres cuya infraccion fue exceso de velocidad
+
+female_and_speeding = ri[(ri.driver_gender=='F') & (ri.violation=='Speeding')]
+male_and_speeding = ri[(ri.driver_gender=='M') & (ri.violation=='Speeding')]
+
+print(female_and_speeding.stop_outcome.value_counts(normalize=True))
+print(male_and_speeding.stop_outcome.value_counts(normalize=True))
+
+#Calculo el promedio de registros por género por violacion
+print(ri.groupby(['driver_gender','violation']).search_conducted.mean())
+
+
+%Veo los tipos de delitos y hago una columna con los que incluyen "Protective Frisk"
+print(ri.search_type.value_counts())
+ri['frisk'] = ri.search_type.str.contains('Protective Frisk', na=False)
+print(ri.frisk.dtype)
+print(ri.frisk.sum())
+
+# Create a DataFrame of stops in which a search was conducted
+searched = ri[ri.search_conducted == True]
+# Calculo el porcentaje de cacheos totales
+print(searched.frisk.mean())
+# Calculo los cacheos por género
+print(searched.groupby('driver_gender').frisk.mean())
+
+
+%%%%%%%%%%%%%%%%%%
+%% Diferentes visualizacions y manejo de la fecha y hora
+# Calculo la tasa de arrestos
+print(ri.is_arrested.mean())
+# Calculo y guardo la tasa de arresto por hora
+hourly_arrest_rate = ri.groupby(ri.index.hour).is_arrested.mean()
+
+##Genero una visualizacion
+
+import matplotlib.pyplot as plt
+
+plt.plot(hourly_arrest_rate)
+plt.xlabel('Hour')
+plt.ylabel('Arrest Rate')
+plt.title('Arrest Rate by Time of Day')
+plt.show()
+
+# Calculo y grafico la tasa anual de arrestos relacionados a la droga
+print(ri.drugs_related_stop.resample('Y').mean())
+annual_drug_rate = ri.drugs_related_stop.resample('Y').mean()
+plt.plot(annual_drug_rate)
+plt.show()
+
+# Genero una tabla de frecuencias por distrito e infracciones
+print(pd.crosstab(ri.district,ri.violation))
+all_zones = pd.crosstab(ri.district,ri.violation)
+
+print(all_zones.loc['Zone K1':'Zone K3'])
+k_zones = all_zones.loc['Zone K1':'Zone K3']
+
+#Realizo un bar plot
+k_zones.plot(kind='bar')
+plt.show()
+
+%% # Print the unique values in 'stop_duration'
+print(ri.stop_duration.unique())
+
+#Utilizo la funcion map para calcular el numero medio de minutos que un conductor permanece detenido
+mapping = {'0-15 Min':8,'16-30 Min':23,'30+ Min':45}
+ri['stop_minutes'] = ri.stop_duration.map(mapping)
+print(ri['stop_minutes'].unique())
+print(ri.groupby('violation_raw').stop_minutes.mean()) %calculo el tiempo medio por parada por infraccion
+stop_length = ri.groupby('violation_raw').stop_minutes.mean()
+stop_length.sort_values().plot(kind='barh')
+plt.show()
+
+
+%%%¿El clima influye en las infracciones?%%%
+#Guardo el dataset y realizo estadistica descriptiva y boxplots para visualizar métricas de la temperatura.
+weather = pd.read_csv('weather.csv')
+print(weather[['TMIN', 'TAVG', 'TMAX']].describe())
+weather[['TMIN', 'TAVG', 'TMAX']].plot(kind='box')
+
+# Creo una columna de diferencia de Temperatura y realizo un histograma
+
+weather['TDIFF']=weather['TMAX']-weather['TMIN']
+print(weather['TDIFF'].describe())
+weather['TDIFF'].plot(kind='hist',bins=20)
+plt.show
+
+WT = weather.loc[:, 'WT01':'WT22']
+weather['bad_conditions'] = WT.sum(axis='columns')
+
+weather['bad_conditions'] = weather.bad_conditions.fillna(0).astype('int')
+
+# Visualizo las malas condiciones
+weather.bad_conditions.plot(kind='hist')
+plt.show()
+print(weather.bad_conditions.value_counts().sort_index())
+
+mapping = {0:'good', 1:'bad', 2:'bad', 3:'bad',4:'bad',5:'worse',6:'worse',7:'worse',8:'worse',9:'worse'}
+weather['rating'] = weather.bad_conditions.map(mapping)
+print(weather['rating'].value_counts())
+cats = pd.CategoricalDtype(['good', 'bad', 'worse'], ordered=True)
+weather['rating'] = weather.rating.astype(cats)
+print(weather.rating.head())
+
+#Uno los Datasets con left join
+print(ri.shape)
+ri_weather = pd.merge(left=ri, right=weather_rating, left_on='stop_date', right_on='DATE', how='left')
+print(ri_weather.shape)
+ri_weather.set_index('stop_datetime', inplace=True)
+
+#Calculo la tasa de arresto en funcion de la infraccion y el estado del tiempo
+arrest_rate = ri_weather.groupby(['violation', 'rating']).is_arrested.mean()
+print(arrest_rate)
+print(arrest_rate.loc['Moving violation', 'bad'])
+print(arrest_rate.loc['Speeding'])

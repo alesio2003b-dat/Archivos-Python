@@ -1,2 +1,12 @@
 En esta carpeta se encuentra el archivo final de un proyecto llevado a cabo en Jupyter notebooks. Haciendo uso de la librería Pandas se realiza una limpieza de un data sets de traspasos del futbol argentino 
 Además de ello se realiza un análisis descriptivo de los datos.
+
+
+Además, se encuentran diferentes proyectos realizados:
+
+Proyecto_Policial_LA es un proyecto en el cual se analizó un dataset para analizar la hora más frecuente en la que se producen crímenes en Los Angeles como así también se obtuvo la zona
+en la que es más frecuente que ocurran crimenes de madrugada.  Por otro lado también se determinaron los rangos etarios que más crímenes sufren.
+
+Mientras que en el proyecto: Policias_Proyecto_Curso se analizó un dataset de detenciones policiales en ROI_Island, en el cual se realizó un analisis exploratorio de los datos,
+se realizó una limpieza de los mismos tratando los valores faltantes. Luego se buscó obsrevar si el género afectaba en las detenciones policiales, de diferentes maneras como así también si el clima afectaba en lo mismo.
+Y para esto último se realizaron diferentes visualizaciones.
